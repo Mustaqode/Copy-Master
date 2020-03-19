@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private val dbHelper by lazy { DbHelper(this, null) }
+    private val copyService by lazy { CopyService() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun startClipboardService() {
         val serviceIntent = Intent(this, CopyService::class.java)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !copyService.isRunning) {
             startForegroundService(serviceIntent)
         }
     }

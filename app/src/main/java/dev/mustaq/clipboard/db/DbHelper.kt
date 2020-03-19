@@ -11,7 +11,7 @@ class DbHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL(
-            "CREATE TABLE $DB_NAME($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_CONTENT TEXT)"
+            "CREATE TABLE $DB_NAME($COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_CONTENT TEXT)"
         )
     }
 
@@ -32,15 +32,24 @@ class DbHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         return db.rawQuery("SELECT * FROM $DB_NAME", null)
     }
 
-    fun showElementsTest() : String?{
+    fun showElementsTest(): String? {
         var string = ""
         val cursor = getList()
         cursor?.moveToFirst()
-        string = cursor?.getString(cursor.getColumnIndex(COLUMN_CONTENT)) ?: "null"
+        if (cursor != null && cursor.count > 0)
+            string = cursor.getString(cursor.getColumnIndex(COLUMN_CONTENT)) ?: "null"
         while (cursor!!.moveToNext()) {
             string += cursor.getString(cursor.getColumnIndex(COLUMN_CONTENT))
         }
         return string
+    }
+
+    fun getLastCopiedText(): String? {
+        val cursor = getList()
+        cursor?.moveToFirst()
+        if (cursor != null)
+            return cursor.getString(cursor.getColumnIndex(COLUMN_CONTENT))
+        return null
     }
 
     companion object {

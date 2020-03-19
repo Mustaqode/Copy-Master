@@ -15,6 +15,11 @@ class CopyService : Service() {
 
     private val clipboardManager by lazy { getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager }
     private val dbHelper by lazy { DbHelper(this, null) }
+    var isRunning = false
+        private set
+
+    var showNotification = false
+        private set
 
     override fun onCreate() {
         super.onCreate()
@@ -25,7 +30,8 @@ class CopyService : Service() {
         val pendingIntent: PendingIntent =
             PendingIntent.getActivity(this, 0, mainIntent, 0)
         val notification = createNotification(pendingIntent)
-        startForeground(FOREGROUND_NOTIFICATION_ID, notification)
+        if (!isRunning) isRunning = true
+        createNotification(notification)
         saveCopiedTextToDb()
         return START_STICKY
     }
@@ -61,8 +67,24 @@ class CopyService : Service() {
         clipboardManager.addPrimaryClipChangedListener {
             val text = clipboardManager.primaryClip?.getItemAt(0)?.text
             Toast.makeText(this, text, Toast.LENGTH_LONG).show()
-            dbHelper.insertRow(Clip(content = text.toString()))
+            if (dbHelper.getLastCopiedText() != text)
+                dbHelper.insertRow(Clip(content = text.toString()))
         }
+    }
+
+    private fun createNotification(notification: Notification) {
+        if (!showNotification) {
+            startForeground(FOREGROUND_NOTIFICATION_ID, notification)
+            showNotification = true
+        }
+    }
+
+    fun isServiceRunning(): Boolean = isRunning
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (isRunning) isRunning = false
+        if (showNotification) showNotification = false
     }
 
     companion object {
