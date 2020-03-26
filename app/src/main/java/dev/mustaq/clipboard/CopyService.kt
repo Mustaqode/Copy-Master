@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
+import android.widget.RemoteViews
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 
@@ -31,16 +32,17 @@ class CopyService : Service() {
     private fun createClipboardNotification(): Notification {
         val homeIntent = Intent(this, HomeActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, homeIntent, 0)
-        return createNotification(pendingIntent)
+        val remoteView = RemoteViews(this.packageName, R.layout.model_service_notification)
+        createNotificationChannel()
+        return createNotification(pendingIntent, remoteView)
     }
 
-    private fun createNotification(intent: PendingIntent): Notification {
-        createNotificationChannel()
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID).apply {
-            setContentTitle("Easy Clipboard is Active")
-            setContentText("Never miss a copied content anymore!")
-            setContentIntent(intent)
-        }
+    private fun createNotification(intent: PendingIntent, remoteView: RemoteViews): Notification {
+        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setCustomContentView(remoteView)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            notification.setCategory(Notification.CATEGORY_SERVICE)
+        else notification.setSound(null)
         return notification.build()
     }
 
