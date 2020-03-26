@@ -1,44 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="4dp"
-    android:background="@color/grey_50">
+    android:background="@color/grey_50"
+    android:padding="4dp">
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <ImageView
         android:id="@+id/uiIvClip"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_margin="8dp"
-        android:src="@drawable/ic_paper_clip"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_centerVertical="true"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/ic_paper_clip" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/uiTvTitle"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
-        android:text="@string/str_easy_copy_is_active"
-        android:textColor="@color/grey_900"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@id/uiIvClip"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_centerVertical="true"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@id/uiIvClip"
+        android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/uiTvCaption"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="@string/str_never_miss_content"
-        android:textColor="@color/grey_900"
-        android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@id/uiIvClip"
-        app:layout_constraintTop_toBottomOf="@id/uiTvTitle" />
+        <TextView
+            android:id="@+id/uiTvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_easy_copy_is_active"
+            android:textColor="@color/grey_900"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/uiTvCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_never_miss_content"
+            android:textColor="@color/grey_900"
+            android:textSize="14sp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+</RelativeLayout>

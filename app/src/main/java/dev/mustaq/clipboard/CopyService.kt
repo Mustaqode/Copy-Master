@@ -40,6 +40,7 @@ class CopyService : Service() {
     private fun createNotification(intent: PendingIntent, remoteView: RemoteViews): Notification {
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setCustomContentView(remoteView)
+            .setSmallIcon(R.drawable.ic_clip)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             notification.setCategory(Notification.CATEGORY_SERVICE)
         else notification.setSound(null)
@@ -51,7 +52,7 @@ class CopyService : Service() {
             val clipboardServiceChannel = NotificationChannel(
                 CHANNEL_ID,
                 CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_DEFAULT
+                NotificationManager.IMPORTANCE_HIGH
             )
             getSystemService(NotificationManager::class.java)?.createNotificationChannel(
                 clipboardServiceChannel
