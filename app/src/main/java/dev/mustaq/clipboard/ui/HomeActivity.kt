@@ -1,9 +1,11 @@
-package dev.mustaq.clipboard
+package dev.mustaq.clipboard.ui
 
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import dev.mustaq.clipboard.R
+import dev.mustaq.clipboard.service.CopyService
 
 class HomeActivity : AppCompatActivity() {
 

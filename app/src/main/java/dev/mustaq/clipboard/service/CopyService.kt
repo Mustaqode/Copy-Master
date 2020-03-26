@@ -1,4 +1,4 @@
-package dev.mustaq.clipboard
+package dev.mustaq.clipboard.service
 
 import android.app.*
 import android.content.ClipboardManager
@@ -9,6 +9,8 @@ import android.os.IBinder
 import android.widget.RemoteViews
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import dev.mustaq.clipboard.ui.HomeActivity
+import dev.mustaq.clipboard.R
 
 class CopyService : Service() {
 
@@ -32,13 +34,17 @@ class CopyService : Service() {
     private fun createClipboardNotification(): Notification {
         val homeIntent = Intent(this, HomeActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, homeIntent, 0)
-        val remoteView = RemoteViews(this.packageName, R.layout.model_service_notification)
+        val remoteView = RemoteViews(this.packageName,
+            R.layout.model_service_notification
+        )
         createNotificationChannel()
         return createNotification(pendingIntent, remoteView)
     }
 
     private fun createNotification(intent: PendingIntent, remoteView: RemoteViews): Notification {
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+        val notification = NotificationCompat.Builder(this,
+            CHANNEL_ID
+        )
             .setCustomContentView(remoteView)
             .setSmallIcon(R.drawable.ic_clip)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
