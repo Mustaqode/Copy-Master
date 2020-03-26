@@ -8,17 +8,12 @@ import android.os.Build
 import android.os.IBinder
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import dev.mustaq.clipboard.db.Clip
-import dev.mustaq.clipboard.db.DbHelper
 
 class CopyService : Service() {
 
     private val clipboardManager by lazy { getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager }
-    private val dbHelper by lazy { DbHelper(this, null) }
-    var isRunning = false
-        private set
 
-    var showNotification = false
+    var isRunning = false
         private set
 
     override fun onCreate() {
@@ -26,18 +21,17 @@ class CopyService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val mainIntent = Intent(this, MainActivity::class.java)
-        val pendingIntent: PendingIntent =
-            PendingIntent.getActivity(this, 0, mainIntent, 0)
-        val notification = createNotification(pendingIntent)
-        if (!isRunning) isRunning = true
-        createNotification(notification)
+        startForegroundService(createClipboardNotification())
         saveCopiedTextToDb()
         return START_STICKY
     }
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
+    override fun onBind(intent: Intent?): IBinder? = null
+
+    private fun createClipboardNotification(): Notification {
+        val homeIntent = Intent(this, HomeActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(this, 0, homeIntent, 0)
+        return createNotification(pendingIntent)
     }
 
     private fun createNotification(intent: PendingIntent): Notification {
@@ -63,33 +57,28 @@ class CopyService : Service() {
         }
     }
 
+    private fun startForegroundService(notification: Notification) {
+        if (!isRunning) {
+            startForeground(FOREGROUND_NOTIFICATION_ID, notification)
+            isRunning = true
+        }
+    }
+
     private fun saveCopiedTextToDb() {
         clipboardManager.addPrimaryClipChangedListener {
             val text = clipboardManager.primaryClip?.getItemAt(0)?.text
             Toast.makeText(this, text, Toast.LENGTH_LONG).show()
-            if (dbHelper.getLastCopiedText() != text)
-                dbHelper.insertRow(Clip(content = text.toString()))
         }
     }
-
-    private fun createNotification(notification: Notification) {
-        if (!showNotification) {
-            startForeground(FOREGROUND_NOTIFICATION_ID, notification)
-            showNotification = true
-        }
-    }
-
-    fun isServiceRunning(): Boolean = isRunning
 
     override fun onDestroy() {
         super.onDestroy()
         if (isRunning) isRunning = false
-        if (showNotification) showNotification = false
     }
 
     companion object {
-        private const val FOREGROUND_NOTIFICATION_ID = 1
-        const val CHANNEL_ID = "1001"
+        private const val FOREGROUND_NOTIFICATION_ID = 1001
+        const val CHANNEL_ID = "CH_01"
         const val CHANNEL_NAME = "Clipboard Service Channel"
     }
 }
