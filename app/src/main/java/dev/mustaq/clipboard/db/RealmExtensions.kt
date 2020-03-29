@@ -3,6 +3,8 @@ package dev.mustaq.clipboard.db
 import android.util.Log
 import io.realm.Realm
 import io.realm.RealmObject
+import io.realm.RealmQuery
+import io.realm.RealmResults
 import io.realm.exceptions.RealmException
 
 /**
@@ -20,21 +22,22 @@ fun <T : RealmObject?> T.saveAndUpdate() {
 }
 
 inline fun <reified T : RealmObject> findAllFromDb(): List<T> {
-    getDefaultRealm().use {realm ->
+    getDefaultRealm().use { realm ->
         return realm.copyFromRealm<T>(realm.where(T::class.java).findAll())
     }
 }
 
-inline fun <reified T: RealmObject> findAllManagedObjectsFromDb() : List<T> {
+inline fun <reified T : RealmObject> findAllManagedObjectsFromDb(): RealmResults<T> {
     getDefaultRealm().use { realm ->
-         return realm.where(T::class.java).findAll()
+        return realm.where(T::class.java).findAll()
     }
 }
 
 /**
  * Deletes all objects from db and returns the status
  */
-fun deleteAllFromDb() : Boolean {
+
+fun deleteAllFromDb(): Boolean {
     var deleteStatus = false
     try {
         getDefaultRealm().transaction { realm ->
@@ -49,10 +52,14 @@ fun deleteAllFromDb() : Boolean {
     return deleteStatus
 }
 
-fun <T: RealmObject> deleteObjectFromDb(clazz: Class<T>) {
-    getDefaultRealm().transaction { realm ->
-        realm.delete(clazz)
-    }
+inline fun <reified T : RealmObject> deleteItemFromDb(query: RealmQuery<T>.() -> RealmQuery<T>): Boolean {
+    val item = query(getDefaultRealm().where(T::class.java)).findFirst()
+    return if (item !== null && RealmObject.isValid(item)) {
+        getDefaultRealm().transaction {
+            item.deleteFromRealm()
+        }
+        true
+    } else false
 }
 
 fun <T : RealmObject> T?.safeClose() {

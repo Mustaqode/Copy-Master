@@ -7,7 +7,7 @@ import io.realm.annotations.PrimaryKey
  * Created by Mustaq Sameer on 28/03/20
  */
 
-open class RealmModels (
+open class ClipModel (
     @PrimaryKey
     var copiedText: String = ""
 ): RealmObject()
