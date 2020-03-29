@@ -11,10 +11,13 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import dev.mustaq.clipboard.ui.HomeActivity
 import dev.mustaq.clipboard.R
+import dev.mustaq.clipboard.db.ClipModel
+import dev.mustaq.clipboard.db.DbManager
 
-class CopyService : Service() {
+class CopyService() : Service() {
 
     private val clipboardManager by lazy { getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager }
+    private val dbManager by lazy { DbManager() }
 
     var isRunning = false
         private set
@@ -76,13 +79,18 @@ class CopyService : Service() {
     private fun saveCopiedTextToDb() {
         clipboardManager.addPrimaryClipChangedListener {
             val text = clipboardManager.primaryClip?.getItemAt(0)?.text
+            val clip = ClipModel(text.toString())
             Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+            dbManager.addCopiedTextToDb(clip)
         }
     }
+
+    fun isServiceRunning() : Boolean = isRunning
 
     override fun onDestroy() {
         super.onDestroy()
         if (isRunning) isRunning = false
+
     }
 
     companion object {

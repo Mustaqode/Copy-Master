@@ -6,6 +6,7 @@ import io.realm.RealmObject
 import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.exceptions.RealmException
+import io.realm.kotlin.isValid
 
 /**
  * Created by Mustaq Sameer on 28/03/20
@@ -15,9 +16,18 @@ fun getDefaultRealm() = Realm.getDefaultInstance()
 
 fun Realm.transaction(realm: (Realm) -> Unit) = use { executeTransaction { realm(this) } }
 
-fun <T : RealmObject?> T.saveAndUpdate() {
+fun <T : RealmObject> T.saveAndUpdate() {
     getDefaultRealm().transaction { realm ->
         realm.insertOrUpdate(this)
+    }
+}
+
+inline fun <reified T : RealmObject> T.saveAndUpdateFreshEntry(query: RealmQuery<T>.() -> RealmQuery<T>) {
+    val item = query(realm.where(T::class.java)).findFirst()
+    if (item == null) {
+        getDefaultRealm().transaction { realm ->
+            realm.insertOrUpdate(this)
+        }
     }
 }
 
@@ -73,4 +83,5 @@ fun <T : RealmObject> T?.safeClose() {
         e.printStackTrace()
     }
 }
+
 

@@ -2,4 +2,7 @@
     <string name="app_name">ClipBoard</string>
     <string name="str_easy_copy_is_active">Easy Copy is active!</string>
     <string name="str_never_miss_content">Never miss a copied content anymore!</string>
+    <string name="str_no_clips_found">No clips found</string>
+    <string name="str_turn_on">Turn on Easy Copy to get copied clips here</string>
+    <string name="str_app_name">Easy Copy</string>
 </resources>

@@ -8,12 +8,17 @@ import io.realm.RealmResults
 
 class DbManager {
 
+    fun addCopiedFreshTextToDb(clip: ClipModel) =
+        clip.saveAndUpdateFreshEntry { equalTo("copiedText", clip.copiedText) }
+
     fun addCopiedTextToDb(clip: ClipModel) = clip.saveAndUpdate()
 
-    fun getAllClipsFromDb(): RealmResults<ClipModel> = findAllManagedObjectsFromDb()
+    fun getAllManagedClipsFromDb(): RealmResults<ClipModel> = findAllManagedObjectsFromDb()
 
-    fun deleteClipFromDb(clip: ClipModel): Boolean  =
-        deleteItemFromDb<ClipModel> { equalTo("copiedText", clip.copiedText ) }
+    fun getAllClipsFromDb(): List<ClipModel> = findAllFromDb()
+
+    fun deleteClipFromDb(clip: ClipModel): Boolean =
+        deleteItemFromDb<ClipModel> { equalTo("copiedText", clip.copiedText) }
 
     fun deleteAllClips(): Boolean = deleteAllFromDb()
 
