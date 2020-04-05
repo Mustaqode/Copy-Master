@@ -1,4 +1,4 @@
-package dev.mustaq.clipboard.application
+package dev.mustaq.clipboard.adapter
 
 import android.view.LayoutInflater
 import android.view.View

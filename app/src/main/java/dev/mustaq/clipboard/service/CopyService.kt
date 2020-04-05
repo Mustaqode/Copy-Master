@@ -7,27 +7,24 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import android.widget.RemoteViews
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import dev.mustaq.clipboard.ui.HomeActivity
 import dev.mustaq.clipboard.R
 import dev.mustaq.clipboard.db.ClipModel
 import dev.mustaq.clipboard.db.DbManager
+import dev.mustaq.clipboard.db.TriggerModel
 
-class CopyService() : Service() {
+class CopyService : Service() {
 
     private val clipboardManager by lazy { getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager }
     private val dbManager by lazy { DbManager() }
-
-    var isRunning = false
-        private set
 
     override fun onCreate() {
         super.onCreate()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForegroundService(createClipboardNotification())
+        startForeground(FOREGROUND_NOTIFICATION_ID, createClipboardNotification())
         saveCopiedTextToDb()
         return START_STICKY
     }
@@ -69,28 +66,17 @@ class CopyService() : Service() {
         }
     }
 
-    private fun startForegroundService(notification: Notification) {
-        if (!isRunning) {
-            startForeground(FOREGROUND_NOTIFICATION_ID, notification)
-            isRunning = true
-        }
-    }
-
     private fun saveCopiedTextToDb() {
         clipboardManager.addPrimaryClipChangedListener {
             val text = clipboardManager.primaryClip?.getItemAt(0)?.text
-            val clip = ClipModel(text.toString())
-            Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+            val clip = ClipModel(copiedText = text.toString())
             dbManager.addCopiedTextToDb(clip)
+            dbManager.addTriggerObject(TriggerModel())
         }
     }
 
-    fun isServiceRunning() : Boolean = isRunning
-
     override fun onDestroy() {
         super.onDestroy()
-        if (isRunning) isRunning = false
-
     }
 
     companion object {
