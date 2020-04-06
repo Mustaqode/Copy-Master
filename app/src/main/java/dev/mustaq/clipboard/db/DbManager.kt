@@ -15,7 +15,9 @@ class DbManager {
 
     fun deleteAllClips(): Boolean = deleteAllFromDb()
 
-    fun addTriggerObject(trigger: TriggerModel) = trigger.saveAndUpdate()
+    fun deleteAllClipsFromDb(): Boolean = deleteAllFromDb(ClipModel())
+
+    fun addTriggerObject() = TriggerModel().saveAndUpdate()
 
     fun getTriggerObjectFromDb(): TriggerModel? = getManagedFindFirstAsync()
 }

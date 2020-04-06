@@ -34,7 +34,8 @@ class CopyService : Service() {
     private fun createClipboardNotification(): Notification {
         val homeIntent = Intent(this, HomeActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, homeIntent, 0)
-        val remoteView = RemoteViews(this.packageName,
+        val remoteView = RemoteViews(
+            this.packageName,
             R.layout.model_service_notification
         )
         createNotificationChannel()
@@ -42,7 +43,8 @@ class CopyService : Service() {
     }
 
     private fun createNotification(intent: PendingIntent, remoteView: RemoteViews): Notification {
-        val notification = NotificationCompat.Builder(this,
+        val notification = NotificationCompat.Builder(
+            this,
             CHANNEL_ID
         )
             .setCustomContentView(remoteView)
@@ -71,7 +73,7 @@ class CopyService : Service() {
             val text = clipboardManager.primaryClip?.getItemAt(0)?.text
             val clip = ClipModel(copiedText = text.toString())
             dbManager.addCopiedTextToDb(clip)
-            dbManager.addTriggerObject(TriggerModel())
+            dbManager.addTriggerObject()
         }
     }
 

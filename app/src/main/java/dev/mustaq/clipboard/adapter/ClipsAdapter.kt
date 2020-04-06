@@ -12,8 +12,10 @@ import kotlinx.android.synthetic.main.model_clips_list.view.*
  * Created by Mustaq Sameer on 29/03/20
  */
 
-class ClipsAdapter :
-    RecyclerView.Adapter<ClipsAdapter.ClipsViewHolder>() {
+class ClipsAdapter(
+    private val onItemClickListener: (String) -> Unit,
+    private val onLongTouchListener: (String) -> Unit
+) : RecyclerView.Adapter<ClipsAdapter.ClipsViewHolder>() {
 
     private val clips: ArrayList<ClipModel> = ArrayList()
 
@@ -33,7 +35,18 @@ class ClipsAdapter :
         holder.itemView.uiTvClip.text = clips[position].copiedText
     }
 
-    inner class ClipsViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    inner class ClipsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        init {
+            view.setOnClickListener {
+                onItemClickListener.invoke(clips[adapterPosition].copiedText)
+            }
+
+            view.setOnLongClickListener {
+                onLongTouchListener.invoke(clips[adapterPosition].copiedText)
+                return@setOnLongClickListener true
+            }
+        }
+    }
 
     fun setItems(list: ArrayList<ClipModel>) {
         clips.clear()

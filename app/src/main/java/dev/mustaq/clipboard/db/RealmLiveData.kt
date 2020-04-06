@@ -4,8 +4,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.OnLifecycleEvent
-import dev.mustaq.clipboard.helper.Trigger
-import io.realm.Realm
 import io.realm.RealmChangeListener
 import io.realm.RealmObject
 

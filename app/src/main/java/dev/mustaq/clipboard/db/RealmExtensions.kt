@@ -1,7 +1,6 @@
 package dev.mustaq.clipboard.db
 
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import io.realm.*
 import io.realm.exceptions.RealmException
@@ -39,7 +38,7 @@ fun <T : RealmObject> LifecycleOwner.realmLiveData(realmObject: T?, onChanged: (
     lifecycle.addObserver(realmLiveData)
     realmLiveData.observe(this, Observer {
         if (it != null) onChanged(it)
-    } )
+    })
 
 }
 
@@ -54,6 +53,23 @@ fun deleteAllFromDb(): Boolean {
             realm.deleteAll()
             deleteStatus = true
         }
+    } catch (e: RealmException) {
+        e.printStackTrace()
+        deleteStatus = false
+    }
+    return deleteStatus
+}
+
+
+inline fun <reified T : RealmObject> deleteAllFromDb(realmObject: T?): Boolean {
+    var deleteStatus = false
+    val realmObjectList: RealmResults<T>? = findAllManagedObjectsFromDb()
+    try {
+        if (realmObjectList != null)
+            getDefaultRealm().transaction { _ ->
+                realmObjectList.deleteAllFromRealm()
+                deleteStatus = true
+            }
     } catch (e: RealmException) {
         e.printStackTrace()
         deleteStatus = false
