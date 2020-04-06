@@ -77,14 +77,13 @@ inline fun <reified T : RealmObject> deleteAllFromDb(realmObject: T?): Boolean {
     return deleteStatus
 }
 
-inline fun <reified T : RealmObject> deleteItemFromDb(query: RealmQuery<T>.() -> RealmQuery<T>): Boolean {
+inline fun <reified T : RealmObject> deleteItemFromDb(query: RealmQuery<T>.() -> RealmQuery<T>) {
     val item = query(getDefaultRealm().where(T::class.java)).findFirst()
-    return if (item !== null && RealmObject.isValid(item)) {
+    if (item !== null && RealmObject.isValid(item)) {
         getDefaultRealm().transaction {
             item.deleteFromRealm()
         }
-        true
-    } else false
+    }
 }
 
 

@@ -10,14 +10,11 @@ import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import dev.mustaq.clipboard.ui.HomeActivity
 import dev.mustaq.clipboard.R
-import dev.mustaq.clipboard.db.ClipModel
-import dev.mustaq.clipboard.db.DbManager
-import dev.mustaq.clipboard.db.TriggerModel
+import dev.mustaq.clipboard.db.*
 
 class CopyService : Service() {
 
     private val clipboardManager by lazy { getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager }
-    private val dbManager by lazy { DbManager() }
 
     override fun onCreate() {
         super.onCreate()
@@ -72,8 +69,8 @@ class CopyService : Service() {
         clipboardManager.addPrimaryClipChangedListener {
             val text = clipboardManager.primaryClip?.getItemAt(0)?.text
             val clip = ClipModel(copiedText = text.toString())
-            dbManager.addCopiedTextToDb(clip)
-            dbManager.addTriggerObject()
+            addCopiedTextToDb(clip)
+            addTriggerObject()
         }
     }
 

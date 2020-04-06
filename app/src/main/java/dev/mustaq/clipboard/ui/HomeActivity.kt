@@ -8,23 +8,24 @@ import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import dev.mustaq.clipboard.R
 import dev.mustaq.clipboard.adapter.ClipsAdapter
-import dev.mustaq.clipboard.db.ClipModel
-import dev.mustaq.clipboard.db.DbManager
-import dev.mustaq.clipboard.db.realmLiveData
+import dev.mustaq.clipboard.db.*
 import dev.mustaq.clipboard.helper.isServiceRunning
 import dev.mustaq.clipboard.mapper.AnalyticsMapper
 import dev.mustaq.clipboard.service.CopyService
 import dev.mustaq.clipboard.ui_elements.ClipsDialogFragment
+import dev.mustaq.clipboard.ui_elements.SwipeRecycleViewHelper
 import kotlinx.android.synthetic.main.activity_main.*
 
 class HomeActivity : AppCompatActivity() {
 
     private val linearLayoutManager by lazy { LinearLayoutManager(this) }
     private val clipsAdapter by lazy { ClipsAdapter(onItemClickListener, onLongTouchListener) }
-    private val dbManager by lazy { DbManager() }
+    private val swipeRecycleViewHelper by lazy { SwipeRecycleViewHelper(this, ::onSwipeListener) }
     private val clips: ArrayList<ClipModel> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,24 +37,22 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupUi() {
-        dbManager.addTriggerObject()
+        addTriggerObject() //To initiate trigger db
         uiSwitchService.isChecked = isServiceRunning(CopyService::class.java)
-        realmLiveData(dbManager.getTriggerObjectFromDb()){
-            clips.clear()
-            clips.addAll(dbManager.getAllClipsFromDb())
-            clipsAdapter.setItems(clips)
-            clipsAdapter.notifyDataSetChanged()
-        }
-        getUpdatedClipsFromDb()
+        realmLiveData(getTriggerObjectFromDb()) { addFreshDataToAdapter() }
         setupAdapter()
+        addFreshDataToAdapter()
     }
 
     private fun setListeners() {
         uiSwitchService.setOnCheckedChangeListener { _, isChecked -> toggleService(isChecked) }
-        uiIvInfo.setOnClickListener { makeToast("Offensive: ${AnalyticsMapper.map(clips).offensiveWords}" +
-                "Links: ${AnalyticsMapper.map(clips).links}" +
-                "UnsafeLinks: ${AnalyticsMapper.map(clips).unsafeLinks}" +
-                "Total: ${AnalyticsMapper.map(clips).totalClips}")
+        uiIvInfo.setOnClickListener {
+            makeToast(
+                "Offensive: ${AnalyticsMapper.map(clips).offensiveWords}" +
+                        "Links: ${AnalyticsMapper.map(clips).links}" +
+                        "UnsafeLinks: ${AnalyticsMapper.map(clips).unsafeLinks}" +
+                        "Total: ${AnalyticsMapper.map(clips).totalClips}"
+            )
         }
     }
 
@@ -67,17 +66,10 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun getUpdatedClipsFromDb() {
-        clips.clear()
-        clips.addAll(dbManager.getAllClipsFromDb())
-        makeToast("${clips.size}")
-    }
-
     private fun setupAdapter() {
         uiRecyclerView.adapter = clipsAdapter
         uiRecyclerView.layoutManager = linearLayoutManager
-        clipsAdapter.setItems(clips)
-        clipsAdapter.notifyDataSetChanged()
+        swipeRecycleViewHelper.attachToRecyclerView(uiRecyclerView)
     }
 
     private fun startClipboardService() {
@@ -92,11 +84,11 @@ class HomeActivity : AppCompatActivity() {
         stopService(serviceIntent)
     }
 
-    private val onItemClickListener: (String) -> Unit = {clip ->
+    private val onItemClickListener: (String) -> Unit = { clip ->
         showClipDialog(clip)
     }
 
-    private val onLongTouchListener: (String) -> Unit = {clip ->
+    private val onLongTouchListener: (String) -> Unit = { clip ->
         val clipboardManager =
             getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipData = ClipData.newPlainText(CLIP_LABEL, clip)
@@ -104,10 +96,39 @@ class HomeActivity : AppCompatActivity() {
         makeToast("Text Copied")
     }
 
-    fun showClipDialog(clip: String) {
+    private fun onSwipeListener(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        val position = viewHolder.adapterPosition
+        when (direction) {
+            ItemTouchHelper.LEFT -> {
+                deleteClipFromDb(clips[position])
+                addFreshDataToAdapter()
+            }
+            ItemTouchHelper.RIGHT -> {
+                shareClip(clips[position].copiedText)
+                clipsAdapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    private fun showClipDialog(clip: String) {
         ClipsDialogFragment.newInstance(clip).apply {
             show(supportFragmentManager, FRAGMENT_ID)
         }
+    }
+
+    private fun addFreshDataToAdapter() {
+        clips.clear()
+        clips.addAll(getAllClipsFromDb())
+        clipsAdapter.setItems(clips)
+    }
+
+    private fun shareClip(clip: String) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, clip)
+            type = "text/plain"
+        }
+        startActivity(Intent.createChooser(sendIntent, "Share the copied clip"))
     }
 
     private fun makeToast(text: String) =

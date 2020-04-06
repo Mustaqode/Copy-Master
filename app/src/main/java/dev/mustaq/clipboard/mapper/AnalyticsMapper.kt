@@ -28,7 +28,7 @@ class AnalyticsMapper {
 
             if (list.isNotEmpty()) {
                 for (item in list) {
-                    val clip = item.copiedText?.toLowerCase()?.trim()
+                    val clip = item.copiedText.toLowerCase().trim()
 
                     /**
                      * Take count on number of clips that contains offensive words.
