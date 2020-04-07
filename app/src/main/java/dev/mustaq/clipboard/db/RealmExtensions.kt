@@ -14,7 +14,7 @@ fun getDefaultRealm() = Realm.getDefaultInstance()
 fun Realm.transaction(realm: (Realm) -> Unit) = use { executeTransaction { realm(this) } }
 
 inline fun <reified T : RealmObject> T.saveAndUpdate() {
-    getDefaultRealm().transaction { realm ->
+    getDefaultRealm().transaction {realm ->
         realm.insertOrUpdate(this)
     }
 }

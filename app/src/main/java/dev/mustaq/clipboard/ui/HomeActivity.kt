@@ -8,6 +8,8 @@ import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,20 +20,26 @@ import dev.mustaq.clipboard.helper.isServiceRunning
 import dev.mustaq.clipboard.mapper.AnalyticsMapper
 import dev.mustaq.clipboard.service.CopyService
 import dev.mustaq.clipboard.ui_elements.ClipsDialogFragment
-import dev.mustaq.clipboard.ui_elements.SwipeRecycleViewHelper
+import dev.mustaq.clipboard.helper.SwipeRecycleViewHelper
 import kotlinx.android.synthetic.main.activity_main.*
 
 class HomeActivity : AppCompatActivity() {
 
     private val linearLayoutManager by lazy { LinearLayoutManager(this) }
     private val clipsAdapter by lazy { ClipsAdapter(onItemClickListener, onLongTouchListener) }
-    private val swipeRecycleViewHelper by lazy { SwipeRecycleViewHelper(this, ::onSwipeListener) }
+    private val swipeRecycleViewHelper by lazy {
+        SwipeRecycleViewHelper(
+            this,
+            ::onSwipeListener
+        )
+    }
     private val clips: ArrayList<ClipModel> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(uiToolbar)
+        val toolbar = findViewById<Toolbar>(R.id.uiToolbar)
+        setSupportActionBar(toolbar)
         setupUi()
         setListeners()
     }
@@ -39,21 +47,19 @@ class HomeActivity : AppCompatActivity() {
     private fun setupUi() {
         addTriggerObject() //To initiate trigger db
         uiSwitchService.isChecked = isServiceRunning(CopyService::class.java)
-        realmLiveData(getTriggerObjectFromDb()) { addFreshDataToAdapter() }
-        setupAdapter()
+        setupRecyclerviewAdapter()
         addFreshDataToAdapter()
+        setupAnalyticsPanel()
+        realmLiveData(getTriggerObjectFromDb()) {
+            addFreshDataToAdapter()
+            setupAnalyticsPanel()
+        }
     }
 
     private fun setListeners() {
         uiSwitchService.setOnCheckedChangeListener { _, isChecked -> toggleService(isChecked) }
-        uiIvInfo.setOnClickListener {
-            makeToast(
-                "Offensive: ${AnalyticsMapper.map(clips).offensiveWords}" +
-                        "Links: ${AnalyticsMapper.map(clips).links}" +
-                        "UnsafeLinks: ${AnalyticsMapper.map(clips).unsafeLinks}" +
-                        "Total: ${AnalyticsMapper.map(clips).totalClips}"
-            )
-        }
+        uiIvInfo.setOnClickListener {}
+        uiTvDeleteAll.setOnClickListener { deleteAllFromDb() }
     }
 
     private fun toggleService(isChecked: Boolean) {
@@ -66,10 +72,25 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupAdapter() {
+    private fun setupRecyclerviewAdapter() {
         uiRecyclerView.adapter = clipsAdapter
         uiRecyclerView.layoutManager = linearLayoutManager
+        uiRecyclerView.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                LinearLayoutManager.VERTICAL
+            ).apply {
+                getDrawable(R.drawable.divider_grey)?.let { setDrawable(it) }
+            })
         swipeRecycleViewHelper.attachToRecyclerView(uiRecyclerView)
+    }
+
+    private fun setupAnalyticsPanel() {
+        val data = AnalyticsMapper.map(clips)
+        uiTvTotalClips.text = data.totalClips.toString()
+        uiTvOffensiveClips.text = data.offensiveWords.toString()
+        uiTvLinks.text = data.links.toString()
+        uiTvUnsafeLinks.text = data.links.toString()
     }
 
     private fun startClipboardService() {
@@ -102,10 +123,12 @@ class HomeActivity : AppCompatActivity() {
             ItemTouchHelper.LEFT -> {
                 deleteClipFromDb(clips[position])
                 addFreshDataToAdapter()
+                setupAnalyticsPanel()
             }
             ItemTouchHelper.RIGHT -> {
                 shareClip(clips[position].copiedText)
                 clipsAdapter.notifyDataSetChanged()
+                setupAnalyticsPanel()
             }
         }
     }

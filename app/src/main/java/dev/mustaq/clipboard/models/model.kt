@@ -6,7 +6,7 @@ package dev.mustaq.clipboard.models
 
 data class AnalyticsModel(
     val totalClips: Int,
-    val offensiveWords: Int,
-    val links: Int,
+    val offensiveWords: Int?,
+    val links: Int?,
     val unsafeLinks: Int
 )

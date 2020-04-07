@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,56 +9,241 @@
         android:id="@+id/uiAppbarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/uiToolbar"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            android:background="@color/colorPrimary">
+            android:layout_height="wrap_content"
+            android:background="@color/smoky_black"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="?actionBarSize">
 
-                <com.suke.widget.SwitchButton
-                    android:id="@+id/uiSwitchService"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:sb_shadow_effect="true"
-                    app:sb_checked_color="@color/colorAccent"
-                    android:layout_marginEnd="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/uiIvInfo"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/uiIvInfo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:src="@drawable/ic_info"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/uiTvTitle"
-                    android:layout_width="wrap_content"
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/str_app_name"
-                    android:textColor="@color/grey_50"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:backgroundTint="@android:color/transparent"
+                    app:cardCornerRadius="16dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="8dp"
+                        android:background="@drawable/bg_transaparent_card">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/uiTvServiceToggleText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/str_keep_this_button_active"
+                            android:textColor="@color/grey_50"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.suke.widget.SwitchButton
+                            android:id="@+id/uiSwitchService"
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintEnd_toEndOf="@id/uiTvServiceToggleText"
+                            app:layout_constraintStart_toStartOf="@id/uiTvServiceToggleText"
+                            app:layout_constraintTop_toBottomOf="@id/uiTvServiceToggleText"
+                            app:sb_checked_color="@color/colorAccent"
+                            app:sb_shadow_effect="true" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/uiGuideLine1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_begin="16dp" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/uiGuideLine2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_end="16dp" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/uiTvTotalClipsCaption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:drawableStart="@drawable/ic_circle_green"
+                            android:drawablePadding="4dp"
+                            android:text="@string/str_total"
+                            android:textColor="@color/grey_50"
+                            android:textSize="16dp"
+                            app:layout_constraintStart_toEndOf="@id/uiGuideLine1"
+                            app:layout_constraintEnd_toStartOf="@+id/uiTvOffensiveClipsCaption"
+                            app:layout_constraintTop_toBottomOf="@id/uiSwitchService" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/uiTvOffensiveClipsCaption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="16dp"
+                            android:drawableStart="@drawable/ic_circle_red"
+                            android:drawablePadding="4dp"
+                            android:text="@string/str_offensive"
+                            android:textColor="@color/grey_50"
+                            android:textSize="16dp"
+                            app:layout_constraintEnd_toStartOf="@+id/uiTvLinksCaption"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/uiTvTotalClipsCaption"
+                            app:layout_constraintTop_toBottomOf="@id/uiSwitchService" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/uiTvLinksCaption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="16dp"
+                            android:drawableStart="@drawable/ic_circle_blue"
+                            android:drawablePadding="4dp"
+                            android:text="@string/str_links"
+                            android:textColor="@color/grey_50"
+                            android:textSize="16dp"
+                            app:layout_constraintEnd_toStartOf="@+id/uiTvUnsafeLinksCaption"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/uiTvOffensiveClipsCaption"
+                            app:layout_constraintTop_toBottomOf="@id/uiSwitchService" />
+
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/uiTvUnsafeLinksCaption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginStart="8dp"
+                            android:drawableStart="@drawable/ic_circle_yellow"
+                            android:drawablePadding="4dp"
+                            android:text="@string/str_unsafe_links"
+                            android:textColor="@color/grey_50"
+                            android:textSize="16dp"
+                            app:layout_constraintEnd_toEndOf="@+id/uiGuideLine2"
+                            app:layout_constraintStart_toEndOf="@+id/uiTvLinksCaption"
+                            app:layout_constraintTop_toBottomOf="@id/uiSwitchService" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/uiTvTotalClips"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="15"
+                            android:textSize="22sp"
+                            android:textColor="@color/grey_50"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="@+id/uiTvTotalClipsCaption"
+                            app:layout_constraintEnd_toEndOf="@id/uiTvTotalClipsCaption"
+                            app:layout_constraintTop_toBottomOf="@id/uiTvTotalClipsCaption"/>
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/uiTvOffensiveClips"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="15"
+                            android:textSize="22sp"
+                            android:textColor="@color/grey_50"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="@+id/uiTvOffensiveClipsCaption"
+                            app:layout_constraintEnd_toEndOf="@+id/uiTvOffensiveClipsCaption"
+                            app:layout_constraintTop_toBottomOf="@+id/uiTvOffensiveClipsCaption"/>
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/uiTvLinks"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="15"
+                            android:textSize="22sp"
+                            android:textColor="@color/grey_50"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="@+id/uiTvLinksCaption"
+                            app:layout_constraintEnd_toEndOf="@+id/uiTvLinksCaption"
+                            app:layout_constraintTop_toBottomOf="@+id/uiTvLinksCaption"/>
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/uiTvUnsafeLinks"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="15"
+                            android:textSize="22sp"
+                            android:textColor="@color/grey_50"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="@+id/uiTvUnsafeLinksCaption"
+                            app:layout_constraintEnd_toEndOf="@+id/uiTvUnsafeLinksCaption"
+                            app:layout_constraintTop_toBottomOf="@+id/uiTvUnsafeLinksCaption"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.appcompat.widget.Toolbar>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/uiToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:background="@color/smoky_black"
+                app:layout_collapseMode="pin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/uiIvInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_info"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/uiTvTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/str_app_name"
+                        android:textColor="@color/grey_50"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/uiTvDeleteAll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/str_delete_all"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -65,23 +251,29 @@
         android:id="@+id/uiRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?actionBarSize"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/uiAppbarLayout" />
+        android:background="@color/smoky_black"
+        android:padding="8dp"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/uiTvNoData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/str_no_clips_found"
-        android:textColor="@color/colorPrimary"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/uiTvNoData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_no_clips_found"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

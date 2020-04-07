@@ -1,4 +1,4 @@
-package dev.mustaq.clipboard.ui_elements
+package dev.mustaq.clipboard.helper
 
 import android.content.Context
 import android.graphics.Canvas

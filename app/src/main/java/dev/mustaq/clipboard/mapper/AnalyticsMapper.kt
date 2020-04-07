@@ -2,6 +2,7 @@ package dev.mustaq.clipboard.mapper
 
 import android.annotation.SuppressLint
 import dev.mustaq.clipboard.db.ClipModel
+import dev.mustaq.clipboard.enums.ContentType
 import dev.mustaq.clipboard.models.AnalyticsModel
 
 /**
@@ -10,21 +11,22 @@ import dev.mustaq.clipboard.models.AnalyticsModel
 
 class AnalyticsMapper {
 
-    fun getOffensiveWords(): ArrayList<String> {
-        return arrayListOf(
-            "Fuck", "Dick", "Pussy", "Bitch", "Porn", "Ass", "Asshole", "blowjob", "bloody", "*",
-            "retarded", "negro", "bastard", "cum", "dildo", "pimp", "gigolo"
-        )
-    }
+    //We may query it from shared preference in the future
+    fun getOffensiveWords(): ArrayList<String> = arrayListOf(
+        "Fuck", "Dick", "Pussy", "Bitch", "Porn", "Ass", "Asshole", "blowjob", "bloody", "*",
+        "retarded", "negro", "bastard", "cum", "dildo", "pimp", "gigolo"
+    )
 
     companion object {
+
+        private val linkPattern = arrayListOf("https://", "http://", "www.")
+
         @SuppressLint("DefaultLocale")
         fun map(list: ArrayList<ClipModel>): AnalyticsModel {
             val offensiveWordsList = AnalyticsMapper().getOffensiveWords()
             val offensiveWords: ArrayList<ClipModel> = arrayListOf()
             val links: ArrayList<ClipModel> = arrayListOf()
             val unsafeLinks: ArrayList<ClipModel> = arrayListOf()
-            val linkPattern = arrayListOf("https://", "http://", "www.")
 
             if (list.isNotEmpty()) {
                 for (item in list) {
@@ -62,17 +64,28 @@ class AnalyticsMapper {
             )
         }
 
-        inline fun <T> Iterable<T>.takeWhileOnce(predicate: (T) -> Boolean): T? {
-            var predicationSuccess = 0
-            var match: T? = null
-            for (item in this) {
-                if (predicate(item)) {
-                    match = item
-                    predicationSuccess = 1
+        @SuppressLint("DefaultLocale")
+        fun map(clipModel: ClipModel): ContentType {
+
+            var contentType: ContentType = ContentType.NORMAL
+            val offensiveWords = AnalyticsMapper().getOffensiveWords()
+            val clip = clipModel.copiedText.toLowerCase().trim()
+
+            for (offensiveWord in offensiveWords) {
+                if (clip.contains(offensiveWord.toLowerCase().trim())) {
+                    contentType = ContentType.OFFENSIVE
+                    break
+                } else {
+                    for (link in linkPattern) {
+                        if (clip.contains(link)) {
+                            contentType = ContentType.LINK
+                            break
+                        }
+                    }
+                    break
                 }
-                if (predicationSuccess == 1) break
             }
-            return match
+            return contentType
         }
     }
 }

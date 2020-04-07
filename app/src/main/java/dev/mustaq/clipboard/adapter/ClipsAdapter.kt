@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dev.mustaq.clipboard.R
 import dev.mustaq.clipboard.db.ClipModel
+import dev.mustaq.clipboard.enums.ContentType.*
+import dev.mustaq.clipboard.mapper.AnalyticsMapper
 import kotlinx.android.synthetic.main.model_clips_list.view.*
 
 /**
@@ -33,6 +35,7 @@ class ClipsAdapter(
 
     override fun onBindViewHolder(holder: ClipsViewHolder, position: Int) {
         holder.itemView.uiTvClip.text = clips[position].copiedText
+        holder.itemView.uiViewIndicator.setBackgroundResource(setIndicatorColorBasedOnContent(position))
     }
 
     inner class ClipsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -52,5 +55,13 @@ class ClipsAdapter(
         clips.clear()
         clips.addAll(list)
         notifyDataSetChanged()
+    }
+
+    private fun setIndicatorColorBasedOnContent(position: Int): Int {
+        return when (AnalyticsMapper.map(clips[position])) {
+            OFFENSIVE -> R.drawable.vertical_indicator_red
+            LINK -> R.drawable.vertical_indicator_blue
+            NORMAL -> R.drawable.vertical_indicator_green
+        }
     }
 }

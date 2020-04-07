@@ -5,4 +5,10 @@
     <string name="str_no_clips_found">No clips found</string>
     <string name="str_turn_on">Turn on Easy Copy to get copied clips here</string>
     <string name="str_app_name">Easy Copy</string>
+    <string name="str_keep_this_button_active">Keep this switch active</string>
+    <string name="str_total">Total</string>
+    <string name="str_offensive">Offensive</string>
+    <string name="str_links">Links</string>
+    <string name="str_unsafe_links">Unsafe Links</string>
+    <string name="str_delete_all">Delete All</string>
 </resources>
