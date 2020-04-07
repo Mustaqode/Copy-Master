@@ -59,7 +59,11 @@ class HomeActivity : AppCompatActivity() {
     private fun setListeners() {
         uiSwitchService.setOnCheckedChangeListener { _, isChecked -> toggleService(isChecked) }
         uiIvInfo.setOnClickListener {}
-        uiTvDeleteAll.setOnClickListener { deleteAllFromDb() }
+        uiTvDeleteAll.setOnClickListener {
+            deleteAllClipsFromDb()
+            addFreshDataToAdapter()
+            setupAnalyticsPanel()
+        }
     }
 
     private fun toggleService(isChecked: Boolean) {

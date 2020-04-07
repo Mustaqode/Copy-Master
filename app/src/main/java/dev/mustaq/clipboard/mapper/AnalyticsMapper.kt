@@ -71,18 +71,17 @@ class AnalyticsMapper {
             val offensiveWords = AnalyticsMapper().getOffensiveWords()
             val clip = clipModel.copiedText.toLowerCase().trim()
 
-            for (offensiveWord in offensiveWords) {
-                if (clip.contains(offensiveWord.toLowerCase().trim())) {
-                    contentType = ContentType.OFFENSIVE
-                    break
-                } else {
-                    for (link in linkPattern) {
-                        if (clip.contains(link)) {
+            offensiveWords.filter { word ->
+                clip.contains(word.toLowerCase().trim())
+            }.apply {
+                if (this.isNotEmpty()) contentType = ContentType.OFFENSIVE
+                else {
+                    linkPattern.filter { link ->
+                        clip.contains(link)
+                    }.apply {
+                        if (this.isNotEmpty())
                             contentType = ContentType.LINK
-                            break
-                        }
                     }
-                    break
                 }
             }
             return contentType
