@@ -16,7 +16,8 @@ import kotlinx.android.synthetic.main.model_clips_list.view.*
 
 class ClipsAdapter(
     private val onItemClickListener: (String) -> Unit,
-    private val onLongTouchListener: (String) -> Unit
+    private val onLongTouchListener: (String) -> Unit,
+    private val onStarClickListener: (ClipModel) -> Unit
 ) : RecyclerView.Adapter<ClipsAdapter.ClipsViewHolder>() {
 
     private val clips: ArrayList<ClipModel> = ArrayList()
@@ -35,7 +36,16 @@ class ClipsAdapter(
 
     override fun onBindViewHolder(holder: ClipsViewHolder, position: Int) {
         holder.itemView.uiTvClip.text = clips[position].copiedText
-        holder.itemView.uiViewIndicator.setBackgroundResource(setIndicatorColorBasedOnContent(position))
+        holder.itemView.uiViewIndicator.setBackgroundResource(
+            setIndicatorColorBasedOnContent(
+                position
+            )
+        )
+        holder.itemView.uiIvStar.let { star ->
+            if (clips[position].isStarred)
+                star.setImageResource(R.drawable.ic_star_yellow)
+            else star.setImageResource(R.drawable.ic_star_grey)
+        }
     }
 
     inner class ClipsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -47,6 +57,14 @@ class ClipsAdapter(
             view.setOnLongClickListener {
                 onLongTouchListener.invoke(clips[adapterPosition].copiedText)
                 return@setOnLongClickListener true
+            }
+
+            view.uiIvStar.setOnClickListener { star ->
+                val clipModel = clips[adapterPosition]
+                if (!clipModel.isStarred)
+                    view.uiIvStar.setImageResource(R.drawable.ic_star_yellow)
+                else view.uiIvStar.setImageResource(R.drawable.ic_star_grey)
+                onStarClickListener.invoke(clipModel)
             }
         }
     }

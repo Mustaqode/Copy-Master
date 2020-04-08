@@ -19,7 +19,12 @@ class AnalyticsMapper {
 
     companion object {
 
-        private val linkPattern = arrayListOf("https://", "http://", "www.")
+        private val linkPattern = arrayListOf(
+            "https://", "http://", "www.", ".in", ".com",
+            ".net", ".co.in", ".co", ".website", ".dev", ".sa", ".uk", ".ra", ".ly"
+        )
+
+        private val unsafeLinksPattern = arrayListOf("http://", "www.", "bit.", ".ly")
 
         @SuppressLint("DefaultLocale")
         fun map(list: ArrayList<ClipModel>): AnalyticsModel {
@@ -55,8 +60,12 @@ class AnalyticsMapper {
                     /**
                      * Take count on number of clips that contains unsafe links.
                      */
-                    if (clip.contains("http://"))
-                        unsafeLinks.add(item)
+                    for (link in unsafeLinksPattern) {
+                        if (clip.contains(link.toLowerCase().trim())) {
+                            unsafeLinks.add(item)
+                            break
+                        }
+                    }
                 }
             }
             return AnalyticsModel(

@@ -14,7 +14,7 @@ fun getDefaultRealm() = Realm.getDefaultInstance()
 fun Realm.transaction(realm: (Realm) -> Unit) = use { executeTransaction { realm(this) } }
 
 inline fun <reified T : RealmObject> T.saveAndUpdate() {
-    getDefaultRealm().transaction {realm ->
+    getDefaultRealm().transaction { realm ->
         realm.insertOrUpdate(this)
     }
 }
@@ -26,6 +26,12 @@ inline fun <reified T : RealmObject> getManagedFindFirstAsync(): T? {
 inline fun <reified T : RealmObject> findAllFromDb(): List<T> {
     getDefaultRealm().use { realm ->
         return realm.copyFromRealm<T>(realm.where(T::class.java).findAll())
+    }
+}
+
+inline fun <reified T : RealmObject> findAllFromDb(query: RealmQuery<T>.() -> RealmQuery<T>): List<T> {
+    getDefaultRealm().use { realm ->
+        return realm.copyFromRealm<T>(realm.where(T::class.java).query().findAll())
     }
 }
 

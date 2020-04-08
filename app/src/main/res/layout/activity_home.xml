@@ -121,7 +121,6 @@
                             app:layout_constraintStart_toEndOf="@+id/uiTvOffensiveClipsCaption"
                             app:layout_constraintTop_toBottomOf="@id/uiSwitchService" />
 
-
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/uiTvUnsafeLinksCaption"
                             android:layout_width="wrap_content"
@@ -259,21 +258,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/uiTvNoData"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/str_no_clips_found"
-            android:textColor="@color/colorPrimary"
-            android:textSize="16sp"
-            android:textStyle="bold"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/uiLottieEmpty"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:lottie_rawRes="@raw/lottie_animation_empty"
+            app:lottie_loop="true"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/uiFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="64dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?android:attr/selectableItemBackground"
+        android:src="@drawable/ic_star_yellow"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="@color/colorPrimary"
+        app:borderWidth="0dp"
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

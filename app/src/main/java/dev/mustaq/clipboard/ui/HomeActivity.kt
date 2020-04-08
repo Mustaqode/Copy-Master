@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -21,12 +22,20 @@ import dev.mustaq.clipboard.mapper.AnalyticsMapper
 import dev.mustaq.clipboard.service.CopyService
 import dev.mustaq.clipboard.ui_elements.ClipsDialogFragment
 import dev.mustaq.clipboard.helper.SwipeRecycleViewHelper
-import kotlinx.android.synthetic.main.activity_main.*
+import dev.mustaq.clipboard.helper.moveToNewActivity
+import dev.mustaq.clipboard.helper.setVisibilityOnCondition
+import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : AppCompatActivity() {
 
     private val linearLayoutManager by lazy { LinearLayoutManager(this) }
-    private val clipsAdapter by lazy { ClipsAdapter(onItemClickListener, onLongTouchListener) }
+    private val clipsAdapter by lazy {
+        ClipsAdapter(
+            onItemClickListener,
+            onLongTouchListener,
+            onStarClickListener
+        )
+    }
     private val swipeRecycleViewHelper by lazy {
         SwipeRecycleViewHelper(
             this,
@@ -37,7 +46,7 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_home)
         val toolbar = findViewById<Toolbar>(R.id.uiToolbar)
         setSupportActionBar(toolbar)
         setupUi()
@@ -53,16 +62,27 @@ class HomeActivity : AppCompatActivity() {
         realmLiveData(getTriggerObjectFromDb()) {
             addFreshDataToAdapter()
             setupAnalyticsPanel()
+            uiTvDeleteAll.setVisibilityOnCondition(clips.size > 0)
+            startLottieAnimation()
         }
+        uiTvDeleteAll.setVisibilityOnCondition(clips.size > 0)
+        startLottieAnimation()
     }
 
     private fun setListeners() {
         uiSwitchService.setOnCheckedChangeListener { _, isChecked -> toggleService(isChecked) }
         uiIvInfo.setOnClickListener {}
+        uiFab.setOnClickListener {
+            moveToNewActivity(
+                StarredClipsActivity::class.java,
+                REQUEST_CODE_ACTIVITY
+            )
+        }
         uiTvDeleteAll.setOnClickListener {
             deleteAllClipsFromDb()
             addFreshDataToAdapter()
             setupAnalyticsPanel()
+            uiTvDeleteAll.visibility = View.INVISIBLE
         }
     }
 
@@ -94,7 +114,13 @@ class HomeActivity : AppCompatActivity() {
         uiTvTotalClips.text = data.totalClips.toString()
         uiTvOffensiveClips.text = data.offensiveWords.toString()
         uiTvLinks.text = data.links.toString()
-        uiTvUnsafeLinks.text = data.links.toString()
+        uiTvUnsafeLinks.text = data.unsafeLinks.toString()
+    }
+
+    private fun startLottieAnimation() {
+        uiLottieEmpty.alpha = 0.2f
+        uiLottieEmpty.setVisibilityOnCondition(clips.size == 0)
+        uiLottieEmpty.playAnimation()
     }
 
     private fun startClipboardService() {
@@ -121,6 +147,11 @@ class HomeActivity : AppCompatActivity() {
         makeToast("Text Copied")
     }
 
+    private val onStarClickListener: (ClipModel) -> Unit = { clipModel ->
+        clipModel.isStarred = !clipModel.isStarred
+        addCopiedTextToDb(clipModel)
+    }
+
     private fun onSwipeListener(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val position = viewHolder.adapterPosition
         when (direction) {
@@ -128,6 +159,7 @@ class HomeActivity : AppCompatActivity() {
                 deleteClipFromDb(clips[position])
                 addFreshDataToAdapter()
                 setupAnalyticsPanel()
+                addTriggerObject() //Trigger livedata
             }
             ItemTouchHelper.RIGHT -> {
                 shareClip(clips[position].copiedText)
@@ -161,9 +193,15 @@ class HomeActivity : AppCompatActivity() {
     private fun makeToast(text: String) =
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        addFreshDataToAdapter()
+    }
+
     companion object {
         private const val FRAGMENT_ID = "1001"
         private const val CLIP_LABEL = "clip.text"
+        private const val REQUEST_CODE_ACTIVITY = 1001
     }
 
 }

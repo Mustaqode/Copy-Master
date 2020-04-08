@@ -11,7 +11,8 @@ import java.util.*
 open class ClipModel (
     @PrimaryKey
     var copiedText: String = "",
-    var insertedAt: Long = System.currentTimeMillis()
+    var insertedAt: Long = System.currentTimeMillis(),
+    var isStarred: Boolean = false
 ): RealmObject()
 
 open class TriggerModel(
