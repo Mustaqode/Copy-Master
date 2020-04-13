@@ -24,8 +24,6 @@ class AnalyticsMapper {
             ".net", ".co.in", ".co", ".website", ".dev", ".sa", ".uk", ".ra", ".ly"
         )
 
-        private val unsafeLinksPattern = arrayListOf("http://", "www.", "bit.", ".ly")
-
         @SuppressLint("DefaultLocale")
         fun map(list: ArrayList<ClipModel>): AnalyticsModel {
             val offensiveWordsList = AnalyticsMapper().getOffensiveWords()
@@ -53,16 +51,6 @@ class AnalyticsMapper {
                     for (link in linkPattern) {
                         if (clip.contains(link)) {
                             links.add(item)
-                            break
-                        }
-                    }
-
-                    /**
-                     * Take count on number of clips that contains unsafe links.
-                     */
-                    for (link in unsafeLinksPattern) {
-                        if (clip.contains(link.toLowerCase().trim())) {
-                            unsafeLinks.add(item)
                             break
                         }
                     }

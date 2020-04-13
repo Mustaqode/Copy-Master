@@ -77,10 +77,10 @@ class StarredClipsActivity : AppCompatActivity() {
         showClipDialog(clip)
     }
 
-    private val onLongTouchListener: (String) -> Unit = { clip ->
+    private val onLongTouchListener: (ClipModel) -> Unit = { clip ->
         val clipboardManager =
             getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clipData = ClipData.newPlainText(CLIP_LABEL, clip)
+        val clipData = ClipData.newPlainText(CLIP_LABEL, clip.copiedText)
         clipboardManager.setPrimaryClip(clipData)
         makeToast("Text Copied")
     }

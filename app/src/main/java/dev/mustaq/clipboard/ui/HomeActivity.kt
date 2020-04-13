@@ -17,18 +17,16 @@ import androidx.recyclerview.widget.RecyclerView
 import dev.mustaq.clipboard.R
 import dev.mustaq.clipboard.adapter.ClipsAdapter
 import dev.mustaq.clipboard.db.*
-import dev.mustaq.clipboard.helper.isServiceRunning
+import dev.mustaq.clipboard.helper.*
 import dev.mustaq.clipboard.mapper.AnalyticsMapper
 import dev.mustaq.clipboard.service.CopyService
 import dev.mustaq.clipboard.ui_elements.ClipsDialogFragment
-import dev.mustaq.clipboard.helper.SwipeRecycleViewHelper
-import dev.mustaq.clipboard.helper.moveToNewActivity
-import dev.mustaq.clipboard.helper.setVisibilityOnCondition
 import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : AppCompatActivity() {
 
     private val linearLayoutManager by lazy { LinearLayoutManager(this) }
+    private val clipboardManager by lazy { getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager }
     private val clipsAdapter by lazy {
         ClipsAdapter(
             onItemClickListener,
@@ -54,6 +52,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupUi() {
+        setForegroundAlpha()
         addTriggerObject() //To initiate trigger db
         uiSwitchService.isChecked = isServiceRunning(CopyService::class.java)
         setupRecyclerviewAdapter()
@@ -63,10 +62,12 @@ class HomeActivity : AppCompatActivity() {
             addFreshDataToAdapter()
             setupAnalyticsPanel()
             uiTvDeleteAll.setVisibilityOnCondition(clips.size > 0)
-            startLottieAnimation()
+            uiEtSearch.setVisibilityOnCondition(clips.size > 0)
+            setEmptyClipIndicator()
         }
         uiTvDeleteAll.setVisibilityOnCondition(clips.size > 0)
-        startLottieAnimation()
+        uiEtSearch.setVisibilityOnCondition(clips.size > 0)
+        setEmptyClipIndicator()
     }
 
     private fun setListeners() {
@@ -78,11 +79,12 @@ class HomeActivity : AppCompatActivity() {
                 REQUEST_CODE_ACTIVITY
             )
         }
-        uiTvDeleteAll.setOnClickListener {
-            deleteAllClipsFromDb()
-            addFreshDataToAdapter()
-            setupAnalyticsPanel()
-            uiTvDeleteAll.visibility = View.INVISIBLE
+        uiTvDeleteAll.setOnClickListener { showDeleteDialog() }
+    }
+
+    private fun setForegroundAlpha() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            uiClHomeLayout.foreground.alpha = 0
         }
     }
 
@@ -114,12 +116,12 @@ class HomeActivity : AppCompatActivity() {
         uiTvTotalClips.text = data.totalClips.toString()
         uiTvOffensiveClips.text = data.offensiveWords.toString()
         uiTvLinks.text = data.links.toString()
-        uiTvUnsafeLinks.text = data.unsafeLinks.toString()
     }
 
-    private fun startLottieAnimation() {
+    private fun setEmptyClipIndicator() {
         uiLottieEmpty.alpha = 0.2f
         uiLottieEmpty.setVisibilityOnCondition(clips.size == 0)
+        uiTvEmptyMessage.setVisibilityOnCondition(clips.size == 0)
         uiLottieEmpty.playAnimation()
     }
 
@@ -139,12 +141,11 @@ class HomeActivity : AppCompatActivity() {
         showClipDialog(clip)
     }
 
-    private val onLongTouchListener: (String) -> Unit = { clip ->
-        val clipboardManager =
-            getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clipData = ClipData.newPlainText(CLIP_LABEL, clip)
+    private val onLongTouchListener: (ClipModel) -> Unit = { clip ->
+        val clipData = ClipData.newPlainText(CLIP_LABEL, clip.copiedText)
         clipboardManager.setPrimaryClip(clipData)
         makeToast("Text Copied")
+        saveCopiedTextToDb(clip)
     }
 
     private val onStarClickListener: (ClipModel) -> Unit = { clipModel ->
@@ -175,6 +176,10 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    private fun showDeleteDialog() {
+        showAlertDialog(positive = deleteAllFromDatabase)
+    }
+
     private fun addFreshDataToAdapter() {
         clips.clear()
         clips.addAll(getAllClipsFromDb())
@@ -190,12 +195,34 @@ class HomeActivity : AppCompatActivity() {
         startActivity(Intent.createChooser(sendIntent, "Share the copied clip"))
     }
 
+    private fun saveCopiedTextToDb(clipModel: ClipModel) {
+        clipboardManager.addPrimaryClipChangedListener {
+            val text = clipboardManager.primaryClip?.getItemAt(0)?.text
+            val clip = ClipModel(copiedText = text.toString(), isStarred = clipModel.isStarred)
+            addCopiedTextToDb(clip)
+            addTriggerObject()
+        }
+    }
+
+    private val deleteAllFromDatabase: () -> Unit = {
+        deleteAllClipsFromDb()
+        addFreshDataToAdapter()
+        setupAnalyticsPanel()
+        addTriggerObject()
+        uiTvDeleteAll.visibility = View.INVISIBLE
+    }
+
     private fun makeToast(text: String) =
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         addFreshDataToAdapter()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setForegroundAlpha()
     }
 
     companion object {

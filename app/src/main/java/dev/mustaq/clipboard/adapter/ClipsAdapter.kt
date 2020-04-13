@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.model_clips_list.view.*
 
 class ClipsAdapter(
     private val onItemClickListener: (String) -> Unit,
-    private val onLongTouchListener: (String) -> Unit,
+    private val onLongTouchListener: (ClipModel) -> Unit,
     private val onStarClickListener: (ClipModel) -> Unit
 ) : RecyclerView.Adapter<ClipsAdapter.ClipsViewHolder>() {
 
@@ -55,7 +55,7 @@ class ClipsAdapter(
             }
 
             view.setOnLongClickListener {
-                onLongTouchListener.invoke(clips[adapterPosition].copiedText)
+                onLongTouchListener.invoke(clips[adapterPosition])
                 return@setOnLongClickListener true
             }
 

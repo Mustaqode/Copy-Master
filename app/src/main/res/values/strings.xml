@@ -11,4 +11,9 @@
     <string name="str_links">Links</string>
     <string name="str_unsafe_links">Unsafe Links</string>
     <string name="str_delete_all">Delete All</string>
+    <string name="str_copy_message">It\'s so lonely here. You turn the above switch ON and start copying content.</string>
+    <string name="str_do_you_really_want_to_delete_all">Do you really want to delete all?</string>
+    <string name="str_yes">Yes</string>
+    <string name="str_no">No</string>
+    <string name="str_type_your_search_query">Type your search query</string>
 </resources>

@@ -2,8 +2,11 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/uiClHomeLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:foreground="@color/grey_transparent"
+    tools:ignore="UnusedAttribute">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/uiAppbarLayout"
@@ -26,6 +29,7 @@
                 android:layout_marginTop="?actionBarSize">
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/uiCvAnalytics"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="16dp"
@@ -36,8 +40,8 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="8dp"
-                        android:background="@drawable/bg_transaparent_card">
+                        android:background="@drawable/bg_transaparent_card"
+                        android:padding="8dp">
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/uiTvServiceToggleText"
@@ -85,8 +89,8 @@
                             android:text="@string/str_total"
                             android:textColor="@color/grey_50"
                             android:textSize="16dp"
-                            app:layout_constraintStart_toEndOf="@id/uiGuideLine1"
                             app:layout_constraintEnd_toStartOf="@+id/uiTvOffensiveClipsCaption"
+                            app:layout_constraintStart_toEndOf="@id/uiGuideLine1"
                             app:layout_constraintTop_toBottomOf="@id/uiSwitchService" />
 
                         <androidx.appcompat.widget.AppCompatTextView
@@ -116,77 +120,85 @@
                             android:text="@string/str_links"
                             android:textColor="@color/grey_50"
                             android:textSize="16dp"
-                            app:layout_constraintEnd_toStartOf="@+id/uiTvUnsafeLinksCaption"
+                            app:layout_constraintEnd_toStartOf="@id/uiGuideLine2"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toEndOf="@+id/uiTvOffensiveClipsCaption"
-                            app:layout_constraintTop_toBottomOf="@id/uiSwitchService" />
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/uiTvUnsafeLinksCaption"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginStart="8dp"
-                            android:drawableStart="@drawable/ic_circle_yellow"
-                            android:drawablePadding="4dp"
-                            android:text="@string/str_unsafe_links"
-                            android:textColor="@color/grey_50"
-                            android:textSize="16dp"
-                            app:layout_constraintEnd_toEndOf="@+id/uiGuideLine2"
-                            app:layout_constraintStart_toEndOf="@+id/uiTvLinksCaption"
                             app:layout_constraintTop_toBottomOf="@id/uiSwitchService" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/uiTvTotalClips"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            tools:text="15"
-                            android:textSize="22sp"
                             android:textColor="@color/grey_50"
+                            android:textSize="22sp"
                             android:textStyle="bold"
-                            app:layout_constraintStart_toStartOf="@+id/uiTvTotalClipsCaption"
                             app:layout_constraintEnd_toEndOf="@id/uiTvTotalClipsCaption"
-                            app:layout_constraintTop_toBottomOf="@id/uiTvTotalClipsCaption"/>
+                            app:layout_constraintStart_toStartOf="@+id/uiTvTotalClipsCaption"
+                            app:layout_constraintTop_toBottomOf="@id/uiTvTotalClipsCaption"
+                            tools:text="15" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/uiTvOffensiveClips"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            tools:text="15"
-                            android:textSize="22sp"
                             android:textColor="@color/grey_50"
+                            android:textSize="22sp"
                             android:textStyle="bold"
-                            app:layout_constraintStart_toStartOf="@+id/uiTvOffensiveClipsCaption"
                             app:layout_constraintEnd_toEndOf="@+id/uiTvOffensiveClipsCaption"
-                            app:layout_constraintTop_toBottomOf="@+id/uiTvOffensiveClipsCaption"/>
+                            app:layout_constraintStart_toStartOf="@+id/uiTvOffensiveClipsCaption"
+                            app:layout_constraintTop_toBottomOf="@+id/uiTvOffensiveClipsCaption"
+                            tools:text="15" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/uiTvLinks"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            tools:text="15"
-                            android:textSize="22sp"
                             android:textColor="@color/grey_50"
+                            android:textSize="22sp"
                             android:textStyle="bold"
-                            app:layout_constraintStart_toStartOf="@+id/uiTvLinksCaption"
                             app:layout_constraintEnd_toEndOf="@+id/uiTvLinksCaption"
-                            app:layout_constraintTop_toBottomOf="@+id/uiTvLinksCaption"/>
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/uiTvUnsafeLinks"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            tools:text="15"
-                            android:textSize="22sp"
-                            android:textColor="@color/grey_50"
-                            android:textStyle="bold"
-                            app:layout_constraintStart_toStartOf="@+id/uiTvUnsafeLinksCaption"
-                            app:layout_constraintEnd_toEndOf="@+id/uiTvUnsafeLinksCaption"
-                            app:layout_constraintTop_toBottomOf="@+id/uiTvUnsafeLinksCaption"/>
+                            app:layout_constraintStart_toStartOf="@+id/uiTvLinksCaption"
+                            app:layout_constraintTop_toBottomOf="@+id/uiTvLinksCaption"
+                            tools:text="15" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.cardview.widget.CardView>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="4dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/uiCvAnalytics">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/uiEtSearch"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_transaparent_card"
+                        android:drawableStart="@drawable/ic_search"
+                        android:drawablePadding="8dp"
+                        android:focusable="auto"
+                        android:hint="@string/str_type_your_search_query"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHint="@color/colorPrimary"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -222,10 +234,9 @@
                         android:textColor="@color/grey_50"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/uiTvDeleteAll"
@@ -263,12 +274,25 @@
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:visibility="invisible"
-            app:lottie_rawRes="@raw/lottie_animation_empty"
-            app:lottie_loop="true"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_animation_empty" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/uiTvEmptyMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/str_copy_message"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="@id/uiLottieEmpty"
+            app:layout_constraintStart_toStartOf="@id/uiLottieEmpty"
+            app:layout_constraintTop_toBottomOf="@id/uiLottieEmpty" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -277,15 +301,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
+        android:layout_marginEnd="32dp"
         android:layout_marginBottom="64dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:backgroundTint="@color/colorPrimary"
         android:clickable="true"
         android:focusable="true"
-        android:background="?android:attr/selectableItemBackground"
         android:src="@drawable/ic_star_yellow"
-        android:layout_marginEnd="32dp"
-        android:backgroundTint="@color/colorPrimary"
-        app:borderWidth="0dp"
-        />
+        app:borderWidth="0dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
