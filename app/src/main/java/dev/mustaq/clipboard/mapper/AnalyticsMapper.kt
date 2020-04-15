@@ -1,6 +1,7 @@
 package dev.mustaq.clipboard.mapper
 
 import android.annotation.SuppressLint
+import dev.mustaq.clipboard.backyard.getOffensiveWords
 import dev.mustaq.clipboard.db.ClipModel
 import dev.mustaq.clipboard.enums.ContentType
 import dev.mustaq.clipboard.models.AnalyticsModel
@@ -11,12 +12,6 @@ import dev.mustaq.clipboard.models.AnalyticsModel
 
 class AnalyticsMapper {
 
-    //We may query it from shared preference in the future
-    fun getOffensiveWords(): ArrayList<String> = arrayListOf(
-        "Fuck", "Dick", "Pussy", "Bitch", "Porn", "Ass", "Asshole", "blowjob", "bloody", "*",
-        "retarded", "negro", "bastard", "cum", "dildo", "pimp", "gigolo"
-    )
-
     companion object {
 
         private val linkPattern = arrayListOf(
@@ -26,7 +21,7 @@ class AnalyticsMapper {
 
         @SuppressLint("DefaultLocale")
         fun map(list: ArrayList<ClipModel>): AnalyticsModel {
-            val offensiveWordsList = AnalyticsMapper().getOffensiveWords()
+            val offensiveWordsList = getOffensiveWords()
             val offensiveWords: ArrayList<ClipModel> = arrayListOf()
             val links: ArrayList<ClipModel> = arrayListOf()
             val unsafeLinks: ArrayList<ClipModel> = arrayListOf()
@@ -65,7 +60,7 @@ class AnalyticsMapper {
         fun map(clipModel: ClipModel): ContentType {
 
             var contentType: ContentType = ContentType.NORMAL
-            val offensiveWords = AnalyticsMapper().getOffensiveWords()
+            val offensiveWords = getOffensiveWords()
             val clip = clipModel.copiedText.toLowerCase().trim()
 
             offensiveWords.filter { word ->

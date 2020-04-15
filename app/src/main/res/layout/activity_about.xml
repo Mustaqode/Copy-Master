@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/smoky_black">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/uiAppbarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/uiToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/smoky_black"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:title="@string/str_about"
+            app:titleTextColor="@color/grey_50" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/uiIvLogoIcon"
+        android:layout_width="76dp"
+        android:layout_height="76dp"
+        android:src="@drawable/ic_easy_copy_logo"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@id/uiAppbarLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/uiTvAppName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_app_name"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@id/uiIvLogoIcon"
+        app:layout_constraintEnd_toEndOf="@id/uiIvLogoIcon"
+        app:layout_constraintTop_toBottomOf="@id/uiIvLogoIcon"
+        />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/uiTvVersion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey_50"
+        android:padding="4dp"
+        app:layout_constraintStart_toStartOf="@id/uiTvAppName"
+        app:layout_constraintEnd_toEndOf="@id/uiTvAppName"
+        app:layout_constraintTop_toBottomOf="@id/uiTvAppName"
+        tools:text="1.0"
+        />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/colorAccent"
+        app:layout_constraintTop_toBottomOf="@id/uiTvVersion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_max="350dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

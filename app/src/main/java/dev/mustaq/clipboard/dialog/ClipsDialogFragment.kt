@@ -1,4 +1,4 @@
-package dev.mustaq.clipboard.ui_elements
+package dev.mustaq.clipboard.dialog
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable

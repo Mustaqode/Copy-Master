@@ -1,15 +1,18 @@
 package dev.mustaq.clipboard.ui
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,8 +23,9 @@ import dev.mustaq.clipboard.db.*
 import dev.mustaq.clipboard.helper.*
 import dev.mustaq.clipboard.mapper.AnalyticsMapper
 import dev.mustaq.clipboard.service.CopyService
-import dev.mustaq.clipboard.ui_elements.ClipsDialogFragment
+import dev.mustaq.clipboard.dialog.ClipsDialogFragment
 import kotlinx.android.synthetic.main.activity_home.*
+import java.util.concurrent.TimeUnit
 
 class HomeActivity : AppCompatActivity() {
 
@@ -41,12 +45,13 @@ class HomeActivity : AppCompatActivity() {
         )
     }
     private val clips: ArrayList<ClipModel> = ArrayList()
+    private var longBackPressed: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        val toolbar = findViewById<Toolbar>(R.id.uiToolbar)
-        setSupportActionBar(toolbar)
+//        val toolbar = findViewById<Toolbar>(R.id.uiToolbar)
+        setSupportActionBar(uiToolbar)
         setupUi()
         setListeners()
     }
@@ -72,14 +77,18 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setListeners() {
         uiSwitchService.setOnCheckedChangeListener { _, isChecked -> toggleService(isChecked) }
-        uiIvInfo.setOnClickListener {}
+        uiIvInfo.setOnClickListener { moveToNewActivity(AboutActivity::class.java)}
+        uiTvDeleteAll.setOnClickListener { showDeleteDialog() }
         uiFab.setOnClickListener {
             moveToNewActivity(
                 StarredClipsActivity::class.java,
                 REQUEST_CODE_ACTIVITY
             )
         }
-        uiTvDeleteAll.setOnClickListener { showDeleteDialog() }
+        uiEtSearch.addTextChangedListener { editable ->
+            if (editable.toString().length > 2) performFilter(editable)
+            else addFreshDataToAdapter()
+        }
     }
 
     private fun setForegroundAlpha() {
@@ -135,6 +144,17 @@ class HomeActivity : AppCompatActivity() {
     private fun stopClipboardService() {
         val serviceIntent = Intent(this, CopyService::class.java)
         stopService(serviceIntent)
+    }
+
+    @SuppressLint("DefaultLocale")
+    private fun performFilter(editable: Editable?) {
+        val filteredList = clips.filter {
+            it.copiedText.toLowerCase().trim().contains(editable.toString().toLowerCase().trim())
+        }
+        clips.clear()
+        clips.addAll(filteredList)
+        clipsAdapter.setItems(clips)
+        clipsAdapter.notifyDataSetChanged()
     }
 
     private val onItemClickListener: (String) -> Unit = { clip ->
@@ -223,6 +243,14 @@ class HomeActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         setForegroundAlpha()
+    }
+
+    override fun onBackPressed() {
+        val difference = System.currentTimeMillis() - longBackPressed
+        if (difference > TimeUnit.SECONDS.toMillis(2))
+            makeToast("Press again to exit")
+        else super.onBackPressed()
+        longBackPressed = System.currentTimeMillis()
     }
 
     companion object {

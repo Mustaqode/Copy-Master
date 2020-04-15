@@ -16,4 +16,7 @@
     <string name="str_yes">Yes</string>
     <string name="str_no">No</string>
     <string name="str_type_your_search_query">Type your search query</string>
+    <string name="str_easy_copy">Easy Copy</string>
+    <string name="str_important_clips">Important Clips</string>
+    <string name="str_about">About</string>
 </resources>

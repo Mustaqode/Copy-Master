@@ -14,8 +14,15 @@ fun View.setVisibilityOnCondition(condition: Boolean) {
     else View.INVISIBLE
 }
 
-fun <T : FragmentActivity> Activity.moveToNewActivity(clazz: Class<T>, requestCode: Int? = null) {
+fun <T : FragmentActivity> Activity.moveToNewActivity(
+    clazz: Class<T>,
+    requestCode: Int? = null,
+    flags: Int? = null
+) {
+    val intent = Intent(this, clazz)
+    if (flags != null)
+        intent.flags = flags
     if (requestCode != null)
-        startActivityForResult(Intent(this, clazz), requestCode)
-    else startActivity(Intent(this, clazz))
+        startActivityForResult(intent, requestCode)
+    else startActivity(intent)
 }

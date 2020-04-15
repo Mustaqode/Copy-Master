@@ -16,7 +16,7 @@ import dev.mustaq.clipboard.adapter.ClipsAdapter
 import dev.mustaq.clipboard.db.*
 import dev.mustaq.clipboard.helper.SwipeRecycleViewHelper
 import dev.mustaq.clipboard.helper.setVisibilityOnCondition
-import dev.mustaq.clipboard.ui_elements.ClipsDialogFragment
+import dev.mustaq.clipboard.dialog.ClipsDialogFragment
 import kotlinx.android.synthetic.main.activity_starred_clips.uiLottieEmpty
 import kotlinx.android.synthetic.main.activity_starred_clips.uiRecyclerView
 import kotlinx.android.synthetic.main.activity_starred_clips.uiToolbar
