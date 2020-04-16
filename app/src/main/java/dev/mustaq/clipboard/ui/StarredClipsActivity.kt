@@ -99,6 +99,7 @@ class StarredClipsActivity : AppCompatActivity() {
                 deleteClipFromDb(clips[position])
                 addFreshDataToAdapter()
                 startLottieAnimation()
+                addTriggerObject()
             }
             ItemTouchHelper.RIGHT -> {
                 shareClip(clips[position].copiedText)

@@ -19,4 +19,23 @@
     <string name="str_easy_copy">Easy Copy</string>
     <string name="str_important_clips">Important Clips</string>
     <string name="str_about">About</string>
+    <string name="str_about_app">The main intention of this app is to make sure that you don\'t miss any data copied to the clipboard as the clipboard data is constantly overwritten by new copied content. Additionally, when you want to take important notes or copy an important url online, all you have to do is just copy the content; this app automatically saves and organizes them for you, reducing your effort on manual copy-paste headache.</string>
+    <string name="str_developed_by">Developed by</string>
+    <string name="str_logo_by">Logo by</string>
+    <string name="str_libraries"><![CDATA[Language & Libraries]]></string>
+    <string name="str_designer_name">Mohamed Irfan</string>
+    <string name="str_lib">Kotlin, Realm DB, Livedata, Foreground Service</string>
+    <string name="str_dev_name">Mustaq Sameer</string>
+    <string name="str_license_details">Click here for license details</string>
+    <string name="str_license_information">License Information</string>
+    <string name="str_mustaq_sameer_2020">Mustaq Sameer Applications | 2020</string>
+    <string name="str_designer_mail">irfanofficialzx@gmail.com</string>
+    <string name="str_developer_mail">devmustaq@gmail.com</string>
+    <string name="str_feedback">Feedback</string>
+    <string name="str_text_copied">Text Copied</string>
+    <string name="str_share">Share the copied clip</string>
+    <string name="str_press_again_exit">Press again to exit</string>
+    <string name="str_service_active">Easy Copy is Active</string>
+    <string name="str_service_stopped">Easy Copy is Stopped</string>
+    <string name="str_guidance_message">Turn this switch ON to save the copied data into this app</string>
 </resources>

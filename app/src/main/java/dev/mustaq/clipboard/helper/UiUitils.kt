@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
@@ -31,6 +30,7 @@ fun Activity.showAlertDialog(
     val dialog = dialogBuilder.create()
     dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     dialog.show()
+    dialog.setCancelable(false)
     if (!message.isNullOrEmpty()) {
         alertMessage.text = message.toString()
     }

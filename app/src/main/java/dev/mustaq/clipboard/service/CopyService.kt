@@ -67,9 +67,12 @@ class CopyService : Service() {
 
     private fun saveCopiedTextToDb() {
         clipboardManager.addPrimaryClipChangedListener {
-            val text = clipboardManager.primaryClip?.getItemAt(0)?.text
-            val clip = ClipModel(copiedText = text.toString())
-            addCopiedTextToDb(clip)
+            val text = (clipboardManager.primaryClip?.getItemAt(0)?.text).toString()
+            val clipModel = getExistingClipFromDb(text)
+            if (clipModel != null) {
+                val isStarred = clipModel.isStarred
+                addCopiedTextToDb(ClipModel(copiedText = text, isStarred = isStarred))
+            } else addCopiedTextToDb(ClipModel(copiedText = text))
             addTriggerObject()
         }
     }

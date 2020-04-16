@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import dev.mustaq.clipboard.R
+import dev.mustaq.clipboard.db.changeAppFirstOpenState
+import dev.mustaq.clipboard.db.isAppAlreadyOpened
 import dev.mustaq.clipboard.helper.moveToNewActivity
 
 /**

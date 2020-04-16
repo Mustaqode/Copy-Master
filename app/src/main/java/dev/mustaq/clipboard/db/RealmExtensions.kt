@@ -19,6 +19,13 @@ inline fun <reified T : RealmObject> T.saveAndUpdate() {
     }
 }
 
+inline fun <reified T : RealmObject> findFirstFromDB(): T? {
+    getDefaultRealm().use { realm ->
+        val item: T? = realm.where(T::class.java).findFirst()
+        return if (item !== null && RealmObject.isValid(item)) realm.copyFromRealm(item) else null
+    }
+}
+
 inline fun <reified T : RealmObject> getManagedFindFirstAsync(): T? {
     return getDefaultRealm().where(T::class.java).findFirstAsync()
 }
@@ -37,6 +44,10 @@ inline fun <reified T : RealmObject> findAllFromDb(query: RealmQuery<T>.() -> Re
 
 inline fun <reified T : RealmObject> findAllManagedObjectsFromDb(): RealmResults<T> {
     return getDefaultRealm().where(T::class.java).sort("insertedAt", Sort.DESCENDING).findAll()
+}
+
+inline fun <reified T: RealmObject> findMatchFromDb(query: RealmQuery<T>.() -> RealmQuery<T>): T? {
+    return getDefaultRealm().where(T::class.java).query().findFirst()
 }
 
 fun <T : RealmObject> LifecycleOwner.realmLiveData(realmObject: T?, onChanged: (T) -> Unit) {

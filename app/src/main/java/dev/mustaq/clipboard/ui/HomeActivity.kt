@@ -11,12 +11,13 @@ import android.text.Editable
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.elconfidencial.bubbleshowcase.BubbleShowCaseBuilder
 import dev.mustaq.clipboard.R
 import dev.mustaq.clipboard.adapter.ClipsAdapter
 import dev.mustaq.clipboard.db.*
@@ -31,6 +32,7 @@ class HomeActivity : AppCompatActivity() {
 
     private val linearLayoutManager by lazy { LinearLayoutManager(this) }
     private val clipboardManager by lazy { getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager }
+
     private val clipsAdapter by lazy {
         ClipsAdapter(
             onItemClickListener,
@@ -50,7 +52,6 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-//        val toolbar = findViewById<Toolbar>(R.id.uiToolbar)
         setSupportActionBar(uiToolbar)
         setupUi()
         setListeners()
@@ -59,6 +60,7 @@ class HomeActivity : AppCompatActivity() {
     private fun setupUi() {
         setForegroundAlpha()
         addTriggerObject() //To initiate trigger db
+        setGuidanceView()
         uiSwitchService.isChecked = isServiceRunning(CopyService::class.java)
         setupRecyclerviewAdapter()
         addFreshDataToAdapter()
@@ -77,7 +79,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setListeners() {
         uiSwitchService.setOnCheckedChangeListener { _, isChecked -> toggleService(isChecked) }
-        uiIvInfo.setOnClickListener { moveToNewActivity(AboutActivity::class.java)}
+        uiIvInfo.setOnClickListener { moveToNewActivity(AboutActivity::class.java) }
         uiTvDeleteAll.setOnClickListener { showDeleteDialog() }
         uiFab.setOnClickListener {
             moveToNewActivity(
@@ -97,13 +99,28 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    private fun setGuidanceView() {
+        if (!isAppAlreadyOpened()) {
+            BubbleShowCaseBuilder(this)
+                .title("Service switch!")
+                .subtitle(getString(R.string.str_guidance_message))
+                .backgroundColor(ContextCompat.getColor(this, R.color.grey_50))
+                .textColor(ContextCompat.getColor(this, R.color.vampire_black))
+                .image(getDrawable(R.drawable.ic_easy_copy_logo)!!)
+                .targetView(uiSwitchService)
+                .closeActionImage(getDrawable(R.drawable.ic_close_black)!!)
+                .show()
+            changeAppFirstOpenState()
+        }
+    }
+
     private fun toggleService(isChecked: Boolean) {
         if (isChecked) {
             startClipboardService()
-            makeToast("Easy Copy is Active")
+            makeToast(getString(R.string.str_service_active))
         } else {
             stopClipboardService()
-            makeToast("Easy Copy is Stopped")
+            makeToast(getString(R.string.str_service_stopped))
         }
     }
 
@@ -164,8 +181,7 @@ class HomeActivity : AppCompatActivity() {
     private val onLongTouchListener: (ClipModel) -> Unit = { clip ->
         val clipData = ClipData.newPlainText(CLIP_LABEL, clip.copiedText)
         clipboardManager.setPrimaryClip(clipData)
-        makeToast("Text Copied")
-        saveCopiedTextToDb(clip)
+        makeToast(getString(R.string.str_text_copied))
     }
 
     private val onStarClickListener: (ClipModel) -> Unit = { clipModel ->
@@ -212,16 +228,7 @@ class HomeActivity : AppCompatActivity() {
             putExtra(Intent.EXTRA_TEXT, clip)
             type = "text/plain"
         }
-        startActivity(Intent.createChooser(sendIntent, "Share the copied clip"))
-    }
-
-    private fun saveCopiedTextToDb(clipModel: ClipModel) {
-        clipboardManager.addPrimaryClipChangedListener {
-            val text = clipboardManager.primaryClip?.getItemAt(0)?.text
-            val clip = ClipModel(copiedText = text.toString(), isStarred = clipModel.isStarred)
-            addCopiedTextToDb(clip)
-            addTriggerObject()
-        }
+        startActivity(Intent.createChooser(sendIntent, getString(R.string.str_share)))
     }
 
     private val deleteAllFromDatabase: () -> Unit = {
@@ -248,7 +255,7 @@ class HomeActivity : AppCompatActivity() {
     override fun onBackPressed() {
         val difference = System.currentTimeMillis() - longBackPressed
         if (difference > TimeUnit.SECONDS.toMillis(2))
-            makeToast("Press again to exit")
+            makeToast(getString(R.string.str_press_again_exit))
         else super.onBackPressed()
         longBackPressed = System.currentTimeMillis()
     }
@@ -257,6 +264,7 @@ class HomeActivity : AppCompatActivity() {
         private const val FRAGMENT_ID = "1001"
         private const val CLIP_LABEL = "clip.text"
         private const val REQUEST_CODE_ACTIVITY = 1001
+        private const val GUIDE_VIEW_ID = "guide.view.id"
     }
 
 }

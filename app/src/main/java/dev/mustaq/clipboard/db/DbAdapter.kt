@@ -23,3 +23,15 @@ fun getTriggerObjectFromDb(): TriggerModel? = getManagedFindFirstAsync()
 fun getAllStarredClips(): List<ClipModel> = findAllFromDb {
     equalTo("isStarred", true)
 }
+
+fun getExistingClipFromDb(clip: String): ClipModel? = findMatchFromDb {
+    equalTo("copiedText", clip)
+}
+
+fun isAppAlreadyOpened() : Boolean {
+    val model : FreshInstallModel? = findFirstFromDB()
+    return model?.isOpened ?: false
+}
+
+fun changeAppFirstOpenState() = FreshInstallModel(isOpened = true).saveAndUpdate()
+
