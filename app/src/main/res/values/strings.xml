@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">ClipBoard</string>
-    <string name="str_easy_copy_is_active">Easy Copy is active!</string>
+    <string name="app_name">Copy Master</string>
+    <string name="str_easy_copy_is_active">Copy Master is active!</string>
     <string name="str_never_miss_content">Never miss a copied content anymore!</string>
     <string name="str_no_clips_found">No clips found</string>
-    <string name="str_turn_on">Turn on Easy Copy to get copied clips here</string>
-    <string name="str_app_name">Easy Copy</string>
+    <string name="str_turn_on">Turn on Copy Master to get copied clips here</string>
+    <string name="str_app_name">Copy Master</string>
     <string name="str_keep_this_button_active">Keep this switch active</string>
     <string name="str_total">Total</string>
     <string name="str_offensive">Offensive</string>
@@ -16,7 +16,7 @@
     <string name="str_yes">Yes</string>
     <string name="str_no">No</string>
     <string name="str_type_your_search_query">Type your search query</string>
-    <string name="str_easy_copy">Easy Copy</string>
+    <string name="str_easy_copy">Copy Master</string>
     <string name="str_important_clips">Important Clips</string>
     <string name="str_about">About</string>
     <string name="str_about_app">The main intention of this app is to make sure that you don\'t miss any data copied to the clipboard as the clipboard data is constantly overwritten by new copied content. Additionally, when you want to take important notes or copy an important url online, all you have to do is just copy the content; this app automatically saves and organizes them for you, reducing your effort on manual copy-paste headache.</string>
@@ -35,7 +35,7 @@
 q    <string name="str_text_copied">Text Copied</string>
     <string name="str_share">Share the copied clip</string>
     <string name="str_press_again_exit">Press again to exit</string>
-    <string name="str_service_active">Easy Copy is Active</string>
-    <string name="str_service_stopped">Easy Copy is Stopped</string>
+    <string name="str_service_active">Copy Master is Active</string>
+    <string name="str_service_stopped">Copy Master is Stopped</string>
     <string name="str_guidance_message">Turn this switch ON to save the copied data into this app</string>
 </resources>

@@ -32,7 +32,12 @@ inline fun <reified T : RealmObject> getManagedFindFirstAsync(): T? {
 
 inline fun <reified T : RealmObject> findAllFromDb(): List<T> {
     getDefaultRealm().use { realm ->
-        return realm.copyFromRealm<T>(realm.where(T::class.java).findAll())
+        return realm.copyFromRealm<T>(
+            realm.where(T::class.java).sort(
+                "insertedAt",
+                Sort.DESCENDING
+            ).findAll()
+        )
     }
 }
 
@@ -46,7 +51,7 @@ inline fun <reified T : RealmObject> findAllManagedObjectsFromDb(): RealmResults
     return getDefaultRealm().where(T::class.java).sort("insertedAt", Sort.DESCENDING).findAll()
 }
 
-inline fun <reified T: RealmObject> findMatchFromDb(query: RealmQuery<T>.() -> RealmQuery<T>): T? {
+inline fun <reified T : RealmObject> findMatchFromDb(query: RealmQuery<T>.() -> RealmQuery<T>): T? {
     return getDefaultRealm().where(T::class.java).query().findFirst()
 }
 
