@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/uiClHomeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:foreground="@color/grey_transparent"
+    tools:ignore="UnusedAttribute">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/uiAppbarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/smoky_black"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="?actionBarSize">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/uiCvAnalytics"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:backgroundTint="@android:color/transparent"
+                    app:cardCornerRadius="16dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_transaparent_card"
+                        android:padding="8dp">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/uiTvServiceToggleText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/str_keep_this_button_active"
+                            android:textColor="@color/grey_50"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.suke.widget.SwitchButton
+                            android:id="@+id/uiSwitchService"
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintEnd_toEndOf="@id/uiTvServiceToggleText"
+                            app:layout_constraintStart_toStartOf="@id/uiTvServiceToggleText"
+                            app:layout_constraintTop_toBottomOf="@id/uiTvServiceToggleText"
+                            app:sb_checked_color="@color/colorAccent"
+                            app:sb_shadow_effect="true" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/uiGuideLine1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_begin="16dp" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/uiGuideLine2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_end="16dp" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/uiTvTotalClipsCaption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:drawableStart="@drawable/ic_circle_green"
+                            android:drawablePadding="4dp"
+                            android:text="@string/str_total"
+                            android:textColor="@color/grey_50"
+                            android:textSize="16dp"
+                            app:layout_constraintEnd_toStartOf="@+id/uiTvOffensiveClipsCaption"
+                            app:layout_constraintStart_toEndOf="@id/uiGuideLine1"
+                            app:layout_constraintTop_toBottomOf="@id/uiSwitchService" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/uiTvOffensiveClipsCaption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="16dp"
+                            android:drawableStart="@drawable/ic_circle_red"
+                            android:drawablePadding="4dp"
+                            android:text="@string/str_offensive"
+                            android:textColor="@color/grey_50"
+                            android:textSize="16dp"
+                            app:layout_constraintEnd_toStartOf="@+id/uiTvLinksCaption"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/uiTvTotalClipsCaption"
+                            app:layout_constraintTop_toBottomOf="@id/uiSwitchService" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/uiTvLinksCaption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="16dp"
+                            android:drawableStart="@drawable/ic_circle_blue"
+                            android:drawablePadding="4dp"
+                            android:text="@string/str_links"
+                            android:textColor="@color/grey_50"
+                            android:textSize="16dp"
+                            app:layout_constraintEnd_toStartOf="@id/uiGuideLine2"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/uiTvOffensiveClipsCaption"
+                            app:layout_constraintTop_toBottomOf="@id/uiSwitchService" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/uiTvTotalClips"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/grey_50"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="@id/uiTvTotalClipsCaption"
+                            app:layout_constraintStart_toStartOf="@+id/uiTvTotalClipsCaption"
+                            app:layout_constraintTop_toBottomOf="@id/uiTvTotalClipsCaption"
+                            tools:text="15" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/uiTvOffensiveClips"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/grey_50"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="@+id/uiTvOffensiveClipsCaption"
+                            app:layout_constraintStart_toStartOf="@+id/uiTvOffensiveClipsCaption"
+                            app:layout_constraintTop_toBottomOf="@+id/uiTvOffensiveClipsCaption"
+                            tools:text="15" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/uiTvLinks"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/grey_50"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="@+id/uiTvLinksCaption"
+                            app:layout_constraintStart_toStartOf="@+id/uiTvLinksCaption"
+                            app:layout_constraintTop_toBottomOf="@+id/uiTvLinksCaption"
+                            tools:text="15" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="4dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/uiCvAnalytics">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/uiEtSearch"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_transaparent_card"
+                        android:drawableStart="@drawable/ic_search"
+                        android:drawablePadding="8dp"
+                        android:focusable="auto"
+                        android:hint="@string/str_type_your_search_query"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHint="@color/colorPrimary"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/uiToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:background="@color/smoky_black"
+                app:layout_collapseMode="pin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/uiIvInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_info"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/uiTvTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/str_app_name"
+                        android:textColor="@color/grey_50"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/uiTvDeleteAll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/str_delete_all"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/uiRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/smoky_black"
+        android:padding="8dp"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/uiLottieEmpty"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_animation_empty" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/uiTvEmptyMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/str_copy_message"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="@id/uiLottieEmpty"
+            app:layout_constraintStart_toStartOf="@id/uiLottieEmpty"
+            app:layout_constraintTop_toBottomOf="@id/uiLottieEmpty" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/uiFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="64dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:backgroundTint="@color/colorPrimary"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_star_yellow"
+        app:borderWidth="0dp" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
