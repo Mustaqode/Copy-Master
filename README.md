@@ -15,3 +15,5 @@ Livedata to update db realtime.
 --> This app is live on playstore <--
 
 --> This app won't work in Android 10 or above since Google decided to stop users from accessing system clipboard. <--
+
+Playstore: https://play.google.com/store/apps/details?id=dev.mustaq.clipboard
